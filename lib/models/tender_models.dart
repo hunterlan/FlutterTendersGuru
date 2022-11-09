@@ -13,7 +13,7 @@ class Datum {
     this.awardedCurrency,
     required this.awardedValueEur,
     required this.purchaser,
-    required this.type,
+    this.type,
     required this.awarded,
     required this.indicators,
   });
@@ -31,7 +31,7 @@ class Datum {
   AwardedCurrency? awardedCurrency;
   String awardedValueEur;
   Purchaser purchaser;
-  Type type;
+  Type? type;
   List<Awarded> awarded;
   List<Indicator> indicators;
 
@@ -49,7 +49,7 @@ class Datum {
     awardedCurrency: awardedCurrencyValues.map[json["awarded_currency"]],
     awardedValueEur: json["awarded_value_eur"],
     purchaser: Purchaser.fromJson(json["purchaser"]),
-    type: Type.fromJson(json["type"]),
+    type: json["type"] == null ? null : Type.fromJson(json["type"]),
     awarded: List<Awarded>.from(json["awarded"].map((x) => Awarded.fromJson(x))),
     indicators: json["indicators"] == null ? [] : List<Indicator>.from(json["indicators"].map((x) => indicatorValues.map[x])),
   );
@@ -68,7 +68,7 @@ class Datum {
     "awarded_currency": awardedCurrencyValues.reverse[awardedCurrency],
     "awarded_value_eur": awardedValueEur,
     "purchaser": purchaser.toJson(),
-    "type": type.toJson(),
+    "type": type!.toJson(),
     "awarded": List<dynamic>.from(awarded.map((x) => x.toJson())),
     "indicators": List<dynamic>.from(indicators.map((x) => indicatorValues.reverse[x])),
   };

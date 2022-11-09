@@ -6,9 +6,12 @@ import 'package:http/http.dart' as http;
 import '../models/page.dart';
 
 class TenderService {
-  Future<Page?> getTenders() async {
+  final _polishTendersUrl = '/pl/tenders';
+
+  Future<Page?> getTenders(int page) async {
     try {
-      var url = Uri.parse(ApiConstants.baseUrl);
+      final addParams = '?page=$page';
+      var url = Uri.parse('${ApiConstants.baseUrl}$_polishTendersUrl$addParams');
       var response = await http.get(url);
       if (response.statusCode == 200) {
         Page page = Page.fromJson(json.decode(response.body));
@@ -17,5 +20,7 @@ class TenderService {
     } catch (e) {
       print(e);
     }
+
+    return null;
   }
 }

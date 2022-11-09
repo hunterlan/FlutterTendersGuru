@@ -15,6 +15,8 @@ class PolishTenders extends StatefulWidget {
 class PolishTendersState extends State<PolishTenders> {
   TenderPage.Page? _page;
   bool _isError = false;
+  int _currentNumberPage = 1;
+  int _maxPage = 1;
 
   @override
   void initState() {
@@ -23,11 +25,13 @@ class PolishTendersState extends State<PolishTenders> {
   }
 
   void _getData() async {
-    final _currentPage = await TenderService().getTenders();
+    final _currentPage = await TenderService().getTenders(_currentNumberPage);
     setState(() {
       _page = _currentPage;
-      if (_page == null) {
+      if (_page == null ) {
         _isError = true;
+      } else {
+        _maxPage = _page!.pageCount;
       }
     });
   }
@@ -78,6 +82,24 @@ class PolishTendersState extends State<PolishTenders> {
     );
   }
 
+  void resetPageValue() {
+    setState(() {
+      _page = null;
+    });
+  }
+
+  void previousPage() {
+    _currentNumberPage--;
+    resetPageValue();
+    _getData();
+  }
+
+  void nextPage() {
+    _currentNumberPage++;
+    resetPageValue();
+    _getData();
+  }
+
   @override
   Widget build(BuildContext context) {
     // TO-DO: Add an error about nog ability getting data
@@ -86,13 +108,33 @@ class PolishTendersState extends State<PolishTenders> {
         title: const Text('Polish tenders'),
         backgroundColor: Colors.red,
       ),
-      body: _page == null
-          ? const Center(
-            child: CircularProgressIndicator(),
-      )
-          :ListView.builder(
-            itemCount: _page!.data.length,
-            itemBuilder: (context, index) => itemBuilder(context, index)
+      body: Column(
+            children: [
+              Expanded(
+                child: _page == null
+                    ? const Center(
+                      child: CircularProgressIndicator(),
+                    )
+                    : _isError ? const Text('Sorry, we cannot get a tenders.') : ListView.builder(
+                    itemCount: _page!.data.length,
+                    itemBuilder: (context, index) => itemBuilder(context, index)
+                ),
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  IconButton(
+                      onPressed: _currentNumberPage == 1 ? null : previousPage,
+                      icon: const Icon(Icons.arrow_back),
+                  ),
+                  Text('${_currentNumberPage.toString()} of $_maxPage'),
+                  IconButton(
+                      onPressed: _currentNumberPage == _maxPage ? null : nextPage,
+                      icon: const Icon(Icons.arrow_forward)
+                  )
+                ],
+              )
+            ],
       ),
     );
   }
