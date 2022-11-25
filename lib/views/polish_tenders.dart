@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:tenders/services/tender_service.dart';
 import 'package:tenders/models/page.dart' as TenderPage;
 
+import 'tender_details.dart';
+
 class PolishTenders extends StatefulWidget {
   const PolishTenders({super.key});
 
@@ -77,7 +79,7 @@ class PolishTendersState extends State<PolishTenders> {
               ],
             ),
           ),
-          onTap: null,
+          onTap: () => Navigator.push(context, MaterialPageRoute(builder: (context) => TenderDetails(item))),
         )
     );
   }
@@ -115,7 +117,7 @@ class PolishTendersState extends State<PolishTenders> {
                     ? const Center(
                       child: CircularProgressIndicator(),
                     )
-                    : _isError ? const Text('Sorry, we cannot get a tenders.') : ListView.builder(
+                    : _isError ? const Text('Sorry, we cannot get tenders.') : ListView.builder(
                     itemCount: _page!.data.length,
                     itemBuilder: (context, index) => itemBuilder(context, index)
                 ),
