@@ -27,9 +27,9 @@ class PolishTendersState extends State<PolishTenders> {
   }
 
   void _getData() async {
-    final _currentPage = await TenderService().getTenders(_currentNumberPage);
+    final currentPage = await TenderService().getTenders(_currentNumberPage);
     setState(() {
-      _page = _currentPage;
+      _page = currentPage;
       if (_page == null ) {
         _isError = true;
       } else {
@@ -84,21 +84,19 @@ class PolishTendersState extends State<PolishTenders> {
     );
   }
 
-  void resetPageValue() {
+  void changeNumberPage(bool toIncrement, bool toFirstPage, bool toLastPage) {
     setState(() {
       _page = null;
     });
-  }
-
-  void previousPage() {
-    _currentNumberPage--;
-    resetPageValue();
-    _getData();
-  }
-
-  void nextPage() {
-    _currentNumberPage++;
-    resetPageValue();
+    if (toFirstPage) {
+      _currentNumberPage = 1;
+    } else if (toLastPage) {
+      _currentNumberPage = _maxPage - 1;
+    } else if (toIncrement) {
+      _currentNumberPage++;
+    } else {
+      _currentNumberPage--;
+    }
     _getData();
   }
 
@@ -126,13 +124,17 @@ class PolishTendersState extends State<PolishTenders> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   IconButton(
-                      onPressed: _currentNumberPage == 1 ? null : previousPage,
+                      onPressed: _currentNumberPage == 1 ? null : () => changeNumberPage(false, false, false),
                       icon: const Icon(Icons.arrow_back),
                   ),
                   Text('${_currentNumberPage.toString()} of $_maxPage'),
                   IconButton(
-                      onPressed: _currentNumberPage == _maxPage ? null : nextPage,
+                      onPressed: _currentNumberPage == _maxPage ? null : () => changeNumberPage(true, false, false),
                       icon: const Icon(Icons.arrow_forward)
+                  ),
+                  IconButton(
+                      onPressed: () => changeNumberPage(false, false, true),
+                      icon: const Icon(Icons.double_arrow)
                   )
                 ],
               )

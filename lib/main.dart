@@ -9,21 +9,24 @@ class MyApp extends StatelessWidget {
 
   Widget _getVertical(BuildContext context) {
     String pathImages = 'assets/images';
-    return Column(
-      children: <Widget>[
-        SvgPicture.asset('$pathImages/handshake.svg'),
-        IconButton(
-            onPressed: () => Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => const PolishTenders())
-            ),
-            icon: SvgPicture.asset('$pathImages/countries/poland.svg')
-        ),
-        IconButton(onPressed: null, icon: SvgPicture.asset('$pathImages/countries/ukraine.svg')),
-        IconButton(onPressed: null, icon: SvgPicture.asset('$pathImages/countries/romania.svg')),
-        IconButton(onPressed: null, icon: SvgPicture.asset('$pathImages/countries/spain.svg')),
-        IconButton(onPressed: null, icon: SvgPicture.asset('$pathImages/countries/hungary.svg')),
-      ],
+    return Container(
+      alignment: Alignment.center,
+      child: Column(
+        children: <Widget>[
+          SvgPicture.asset('$pathImages/handshake.svg'),
+          IconButton(
+              onPressed: () => Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => const PolishTenders())
+              ),
+              icon: SvgPicture.asset('$pathImages/countries/poland.svg')
+          ),
+          IconButton(onPressed: null, icon: SvgPicture.asset('$pathImages/countries/ukraine.svg')),
+          IconButton(onPressed: null, icon: SvgPicture.asset('$pathImages/countries/romania.svg')),
+          IconButton(onPressed: null, icon: SvgPicture.asset('$pathImages/countries/spain.svg')),
+          IconButton(onPressed: null, icon: SvgPicture.asset('$pathImages/countries/hungary.svg')),
+        ],
+      ),
     );
   }
 
